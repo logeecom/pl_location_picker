@@ -1,0 +1,288 @@
+@media screen and (max-width: 850px) {
+    .collapse {
+        display: none !important;
+    }
+
+    .expand {
+        width: 100% !important;
+        transition: all 0.5s ease;
+    }
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+.content {
+    height: 100%;
+    display: flex;
+}
+
+.half {
+    height: 100%;
+    width: 50%;
+    overflow: hidden;
+    position: relative;
+
+}
+
+.locations {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.info-window {
+    margin-top: 10px;
+    margin-left: 20px;
+    width: 250px;
+}
+
+.info-window .title {
+    margin-bottom: 10px;
+    color: #5d5d5d;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.info-window .text {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #5d5d5d;
+    font-weight: 400;
+}
+
+.info-window .link {
+    margin: 10px 0 15px 0;
+    font-size: .78572rem;
+    font-weight: 400;
+    color: #2095f2;
+    cursor: pointer;
+}
+
+.info-window .link:hover {
+    color: #005E96;
+}
+
+.info-window .link * {
+    pointer-events: none;
+}
+
+.info-window .button {
+    height: 35px;
+    border: 1px solid #2095f2;
+    border-radius: 4px;
+    line-height: 35px;
+    font-size: 14px;
+    text-align: center;
+    font-weight: 400;
+    color: #2095f2;
+    cursor: pointer;
+}
+
+.info-window .button:hover {
+    background-color: #2095f2;
+    color: white;
+}
+
+.info-window .button * {
+    pointer-events: none;
+}
+
+.working-hours {
+    visibility: hidden;
+    height: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    opacity: 0;
+}
+
+.working-hours.enabled {
+    visibility: visible;
+    height: auto;
+    opacity: 1 !important;
+    transition: opacity 0.25s ease-in;
+    margin-bottom: 15px;
+}
+
+.hour-wrapper {
+    display: flex;
+}
+
+.hour-wrapper * {
+    height: 25px;
+    line-height: 25px;
+    color: #5d5d5d;
+}
+
+.hour-wrapper .day {
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: bold;
+    width: 45%;
+}
+
+.hour-wrapper .hours {
+    flex-grow: 1;
+    font-size: 12px;
+}
+
+.input-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 50px;
+    margin: 10px 0;
+}
+
+.input-wrapper > .input {
+    width: 70%;
+    justify-content: left;
+    position: relative;
+}
+
+.input-wrapper > .input > input {
+    height: 50px;
+    box-sizing: border-box;
+    background-color: white;
+    border-radius: 0;
+    border: 1px solid #dcdcdc;
+    padding: 20px 0 0 15px;
+    width: 100%;
+    font-size: 14px;
+    color: #5d5d5d;
+}
+
+.input-wrapper > .input > input:focus {
+    border: 1px solid #2095f2 !important;
+    outline: none !important;
+}
+
+.input-wrapper > .input > .label {
+    height: 16px;
+    max-width: 95%;
+    line-height: 16px;
+    position: absolute;
+    top: 16px;
+    left: 15px;
+    text-transform: uppercase;
+    font: bold 16px Roboto, Arial, sans-serif;
+    color: #9b9b9b;
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.input-wrapper > .input > input:focus + .label,
+.input-wrapper > .input > input:valid + .label {
+    height: 12px;
+    line-height: 12px;
+    position: absolute;
+    top: 12px;
+    left: 15px;
+    text-transform: uppercase;
+    font: bold 12px Roboto, Arial, sans-serif;
+    color: #5d5d5d;
+    pointer-events: none;
+    transition: all .25s ease-in;
+}
+
+.location-wrapper {
+    box-sizing: border-box;
+    height: 50px;
+    width: 100%;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #dcdcdc;
+    display: flex;
+    padding: 0 20px;
+    cursor: pointer;
+}
+
+.location-wrapper.selected {
+    border: 1px solid #56b652;
+}
+
+.location-wrapper.selected .radio {
+    background-color: #9b9b9b;
+}
+
+.location-wrapper > * {
+    height: 50px;
+    font: normal 14px Roboto, Arial, sans-serif;
+    line-height: 50px;
+    color: #5d5d5d;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+}
+
+.location-wrapper > .radio-button {
+    margin-right: 20px;
+}
+
+.location-wrapper > .name {
+    width: 30%;
+    font-weight: bold;
+}
+
+.location-wrapper > .street {
+    flex-grow: 1;
+}
+
+.location-wrapper > .city {
+    width: 20%;
+}
+
+.location-wrapper .radio {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid #5d5d5d;
+    background-color: gainsboro;
+    margin-top: 19px;
+}
+
+#locations {
+    width: 100%;
+}
+
+.spinner-wrapper {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: white;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #dcdcdc;
+    border-left: 5px solid #2095f2;
+    border-radius: 50%;
+    animation: rotate 1.5s linear infinite;
+}
+
+.spinner-wrapper.disabled {
+    display: none !important;
+}
+
+.template {
+    display: none !important;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
