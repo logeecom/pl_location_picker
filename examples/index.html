@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Location test</title>
+</head>
+<body>
+<script>
+    let locations = [
+        {
+            id: '1',
+            name: 'This is location name',
+            zip: '11000',
+            address: 'Ulica Sima Simica 25',
+            city: 'Belgrade',
+            lat: 44.7866,
+            long: 20.4489,
+            workingHours: {
+                friday: '10:30-12:30, 14:00:16:00',
+                thursday: '10:30-12:30, 14:00:16:00',
+                wednesday: '10:30-12:30, 14:00:16:00',
+                monday: '10:30-12:30, 14:00:16:00',
+                tuesday: '10:30-12:30, 14:00:16:00'
+            }
+        },
+        {
+            id: '2',
+            name: 'This is another name',
+            zip: '179832',
+            address: 'Ulica Jova Jovanovica 25',
+            city: 'Paris',
+            lat: 44.6866,
+            long: 20.3489,
+            workingHours: {
+                friday: '10:30-12:30, 14:00:16:00',
+                thursday: '10:30-12:30, 14:00:16:00',
+                wednesday: '10:30-12:30, 14:00:16:00',
+                monday: '10:30-12:30, 14:00:16:00',
+                tuesday: '10:30-12:30, 14:00:16:00'
+            }
+        },
+        {
+            id: '3',
+            name: 'This is third name',
+            zip: '12456',
+            address: 'Ulica Marka Markovica 25',
+            lat: 44.8866,
+            long: 20.4489,
+            city: 'Berlin',
+            workingHours: {
+                friday: '10:30-12:30, 14:00:16:00',
+                thursday: '10:30-12:30, 14:00:16:00',
+                wednesday: '10:30-12:30, 14:00:16:00',
+                monday: '10:30-12:30, 14:00:16:00',
+                tuesday: '10:30-12:30, 14:00:16:00'
+            }
+        }
+    ];
+
+    window.onmessage = function (event) {
+        if (event.data.type === 'ready') {
+            let iframe = document.getElementById('my-iframe');
+            iframe.contentWindow.postMessage({type: 'locations', payload: locations}, '*');
+        }
+
+        if (event.data.type === 'select') {
+            document.getElementById('writer').innerHTML = "SELECTED: " + event.data.payload.id;
+        }
+    }
+</script>
+<iframe src="https://pro.packlink.fr/index.html?lang=en" width="1200" height="600" frameborder="0"
+        id="my-iframe"></iframe>
+<h1 id="writer"></h1>
+</body>
+</html>
