@@ -19,6 +19,7 @@ html, body {
 .content {
     height: 100%;
     display: flex;
+    background-color: white;
 }
 
 .half {
