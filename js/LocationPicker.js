@@ -67,6 +67,7 @@
          */
         function postMessageHandler(event) {
             if (event.data.type === 'locations') {
+                renderedLocations = [];
                 for (let loc of event.data.payload) {
                     locations[loc.id] = loc;
                     renderedLocations.push(loc.id);
@@ -76,6 +77,10 @@
                 addLocations();
 
                 document.getElementById('spinner').classList.add('disabled');
+            }
+
+            if (event.data.type === 'reset') {
+                window.location.reload(true);
             }
         }
 

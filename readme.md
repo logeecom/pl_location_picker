@@ -16,4 +16,8 @@ thus allowing user to make selection.
 5. When user selects location, location picker library will send message in the following format:
 `{type:'select', payload: {id: SELECTED_LOCATION_ID}}`.
 
+#### Reset
+You can reset location picker library by sending following message `{type:'reset'}`.
+
+#### Example implementation
 Reference implementation of specified communication protocol can be found at `/examples/index.html`
