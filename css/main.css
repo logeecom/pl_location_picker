@@ -1,11 +1,11 @@
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 750px) {
     .collapse {
         display: none !important;
     }
 
     .expand {
-        width: 100% !important;
-        transition: all 0.5s ease;
+        display: block !important;
+        flex-grow: 1;
     }
 }
 
@@ -18,61 +18,23 @@ html, body {
 
 .content {
     height: 100%;
+    width: 100%;
     display: flex;
     background-color: white;
 }
 
-.half {
-    height: 100%;
-    width: 50%;
-    overflow: hidden;
-    position: relative;
-
-}
-
 .locations {
+    width: 100%;
     overflow-x: hidden;
     overflow-y: auto;
 }
 
-.info-window {
-    margin-top: 10px;
-    margin-left: 20px;
-    width: 250px;
+.select-column {
+    text-overflow: clip !important;
+    min-width: 90px;
 }
 
-.info-window .title {
-    margin-bottom: 10px;
-    color: #5d5d5d;
-    font-size: 18px;
-    font-weight: 600;
-    text-transform: capitalize;
-}
-
-.info-window .text {
-    margin-bottom: 5px;
-    font-size: 14px;
-    color: #5d5d5d;
-    font-weight: 400;
-}
-
-.info-window .link {
-    margin: 10px 0 15px 0;
-    font-size: .78572rem;
-    font-weight: 400;
-    color: #2095f2;
-    cursor: pointer;
-}
-
-.info-window .link:hover {
-    color: #005E96;
-}
-
-.info-window .link * {
-    pointer-events: none;
-}
-
-.info-window .button {
+.select-button {
     height: 35px;
     border: 1px solid #2095f2;
     border-radius: 4px;
@@ -82,14 +44,16 @@ html, body {
     font-weight: 400;
     color: #2095f2;
     cursor: pointer;
+    display: inline-block;
+    margin-right: 25px;
+    padding: 0 20px;
 }
 
-.info-window .button:hover {
+.select-button:hover {
     background-color: #2095f2;
     color: white;
 }
-
-.info-window .button * {
+ .select-button * {
     pointer-events: none;
 }
 
@@ -99,14 +63,16 @@ html, body {
     overflow-x: hidden;
     overflow-y: hidden;
     opacity: 0;
+    width: 250px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .working-hours.enabled {
     visibility: visible;
     height: auto;
     opacity: 1 !important;
-    transition: opacity 0.25s ease-in;
-    margin-bottom: 15px;
+    transition: opacity .25s ease-in;
 }
 
 .hour-wrapper {
@@ -194,12 +160,12 @@ html, body {
 
 .location-wrapper {
     box-sizing: border-box;
-    height: 50px;
+    min-height: 50px;
     width: 100%;
     border: 1px solid transparent;
     border-bottom: 1px solid #dcdcdc;
     display: flex;
-    padding: 0 20px;
+    padding: 0 0 0 20px;
     cursor: pointer;
 }
 
@@ -208,18 +174,36 @@ html, body {
 }
 
 .location-wrapper.selected .radio {
-    background-color: #9b9b9b;
+    background-color: #bdbdbd;
 }
 
 .location-wrapper > * {
-    height: 50px;
+    min-height: 55px;
     font: normal 14px Roboto, Arial, sans-serif;
-    line-height: 50px;
     color: #5d5d5d;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.location-wrapper > *:not(.street) {
+    line-height: 50px;
+}
+
+.location-wrapper > .composite {
+    display: none;
+    line-height: 20px;
+    margin-top: 16px;
+    white-space: normal;
+    overflow: visible;
+}
+
+.location-wrapper > * {
     pointer-events: none;
+}
+
+.location-wrapper .excluded {
+    pointer-events: all !important;
 }
 
 .location-wrapper > .radio-button {
@@ -233,6 +217,20 @@ html, body {
 
 .location-wrapper > .street {
     flex-grow: 1;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
+
+.location-wrapper > .street > .street-name {
+    margin-top: 13px;
+}
+
+.working-hours-btn {
+    color: #2095f2;
+    font-size: 12px;
+    font-weight: 400;
+    display: inline-block;
 }
 
 .location-wrapper > .city {
@@ -243,8 +241,8 @@ html, body {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: 1px solid #5d5d5d;
-    background-color: gainsboro;
+    border: 1px solid #8a8a8a;
+    background-color: #f5f5f5;
     margin-top: 19px;
 }
 
@@ -276,6 +274,24 @@ html, body {
 
 .spinner-wrapper.disabled {
     display: none !important;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.show-on-map-btn {
+    margin-top: 4px;
+    margin-right: 20px;
+    width: 28px;
+    height: 44px;
+    background-image: url(./../img/pin.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+a:hover > .show-on-map-btn {
+    background-image: url(./../img/pin-selected.svg) !important;
 }
 
 .template {

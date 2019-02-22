@@ -1,4 +1,0 @@
-<IfModule mod_headers.c>
-    # allow running inside iframe
-    Header always set X-Frame-Options ALLOWALL
-</IfModule>

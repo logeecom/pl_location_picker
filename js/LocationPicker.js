@@ -1,7 +1,7 @@
+var Packlink = window.Packlink || {};
+
 (function () {
     function LocationPickerConstructor() {
-        const pinIcon = '/img/pin.svg';
-        const pinIconSelected = '/img/pin-selected.svg';
         const days = [
             'monday',
             'tuesday',
@@ -21,79 +21,61 @@
         ];
 
         let lang = null;
+        let selectCallback = null;
 
-        let map = null;
-        let latLongBounds = null;
-        let selectedMarker = null;
+        let templateContainer = null;
+
         let selectedLocation = null;
-        let infoWindow = null;
-        let markers = {};
         let dropOffs = {};
         let renderedLocations = [];
 
         let locations = {};
 
         // Register public method and properties.
-        this.init = init;
+        this.display = display;
 
         /**
          * Initializes location picker.map.event.trigger('resize');
          *
-         * @param googleMap
+         * @param {array} locations Array of Drop-Off locations.
+         * @param {function} selectLocationCallback callback that is called when user selects location.
+         * @param {string} [language] Translation language code. Defaults to 'en' for English.
          */
-        function init(googleMap) {
-            map = googleMap;
-            lang = getParameterByName('lang');
-            lang = lang ? lang : 'en';
-
-            attachGlobalEventListeners();
+        function display(locations, selectLocationCallback, language) {
+            templateContainer = document.getElementById('template-container');
+            lang = typeof language === 'undefined' ? 'en' : language;
+            selectCallback = selectLocationCallback;
             initializeSearchBox();
-
-            window.top.postMessage({type: 'ready'}, '*');
+            renderLocations(locations);
         }
 
-        /**
-         * Attaches event listeners on map div.
-         */
-        function attachGlobalEventListeners() {
-            window.addEventListener('resize', resizeMap, true);
-            window.addEventListener('message', postMessageHandler);
-        }
 
         /**
          * Message receiver.
          *
-         * @param event
+         * @param {object} payload
          */
-        function postMessageHandler(event) {
-            if (event.data.type === 'locations') {
-                renderedLocations = [];
-                for (let loc of event.data.payload) {
-                    locations[loc.id] = loc;
-                    renderedLocations.push(loc.id);
-                }
-
-                addPins(true);
-                addLocations();
-
-                document.getElementById('spinner').classList.add('disabled');
+        function renderLocations(payload) {
+            renderedLocations = [];
+            for (let loc of payload) {
+                locations[loc.id] = loc;
+                renderedLocations.push(loc.id);
             }
 
-            if (event.data.type === 'reset') {
-                window.location.reload(true);
-            }
+            addLocations();
+            getElement(document, 'spinner').classList.add('disabled');
         }
 
         /**
          * Initializes search-box.
          */
         function initializeSearchBox() {
-            let searchBox = document.getElementById('search-box');
+            let searchBox = getElement(document, 'search-box');
 
             if (searchBox) {
                 searchBox.addEventListener('keyup', debounce(200, searchBoxKeyupHandler));
 
-                let searchLabel = document.getElementById('search-box-label');
+                let searchLabel = getElement(document, 'search-box-label');
                 searchLabel.innerHTML = getTranslation(lang, ['searchLabel']);
             }
         }
@@ -121,47 +103,14 @@
                 })
             }
 
-            addPins();
             addLocations();
-        }
-
-        /**
-         * Adds pins to the map.
-         *
-         * @param {boolean} [resize]
-         */
-        function addPins(resize) {
-            for (let displayed in markers) {
-                if (markers.hasOwnProperty(displayed)) {
-                    markers[displayed].setMap(null);
-                }
-            }
-
-            if (resize) {
-                latLongBounds = new google.maps.LatLngBounds();
-            }
-
-            markers = {};
-            selectedMarker = null;
-
-            for (let id of renderedLocations) {
-                let location = locations[id];
-                let latLong = new google.maps.LatLng(location.lat, location.long);
-                markers[id] = createMarker(latLong, location);
-
-                if (resize) {
-                    latLongBounds.extend(latLong);
-                }
-            }
-
-            map.fitBounds(latLongBounds);
         }
 
         /**
          * Adds Locations.
          */
         function addLocations() {
-            let locationsNode = document.getElementById('locations');
+            let locationsNode = getElement(document, 'locations');
 
             while (locationsNode.firstChild) {
                 locationsNode.firstChild.remove();
@@ -184,34 +133,7 @@
             }
         }
 
-        /**
-         * Creates new marker with attached event handler.
-         *
-         * @param {google.maps.LatLng}latLong
-         * @param {object} data
-         *
-         * @return {google.maps.Marker}
-         */
-        function createMarker(latLong, data) {
-            let marker = new google.maps.Marker({
-                position: latLong,
-                map: map,
-                visible: true,
-                icon: pinIcon
-            });
 
-            marker.additionalOptions = {
-                selected: false,
-                workingHours: false,
-                data: data
-            };
-
-            google.maps.event.addListener(marker, 'click', function () {
-                markerClickedHandler(marker);
-            });
-
-            return marker;
-        }
 
         /**
          * Creates DropOff location.
@@ -225,41 +147,52 @@
             getElement(template, 'location-name').innerHTML = location.name;
             getElement(template, 'location-street').innerHTML = location.address;
             getElement(template, 'location-city').innerHTML = location.city + ', ' + location.zip;
+            getElement(template, 'composite-address').innerHTML = '<b>' + location.name + '</b>' + ', '
+                + location.address + ', ' + location.city + ', ' + location.zip;
+
+            let showOnMapBtn = getElement(template, 'show-on-map');
+            showOnMapBtn.href = `https://www.google.com/maps/search/?api=1&query=${location['lat']},${location['long']}`;
+            showOnMapBtn.title = getTranslation(lang, ['showOnMapTitle']);
+
+            let showWorkingHoursBtn = getElement(template, 'show-working-hours-btn');
+            showWorkingHoursBtn.innerHTML = getTranslation(lang, ['workingHoursLabel']);
+            showWorkingHoursBtn.setAttribute('data-id', location['id']);
+            showWorkingHoursBtn.addEventListener('click', workingHoursButtonClickHandler);
+
+            let showCompositeHoursBtn = getElement(template, 'show-composite-working-hours-btn');
+            showCompositeHoursBtn.innerHTML = getTranslation(lang, ['workingHoursLabel']);
+            showCompositeHoursBtn.setAttribute('data-id', location['id']);
+            showCompositeHoursBtn.addEventListener('click', workingHoursButtonClickHandler);
+
+
+            let workingHoursNode = getElement(template, 'working-hours');
+            let compositeHoursNode = getElement(template, 'composite-working-hours');
+
+            for (let day of days) {
+                if (location['workingHours'][day]) {
+                    let workingHoursTemplate = getWorkingHoursTemplate(day, location['workingHours'][day]);
+                    workingHoursNode.appendChild(workingHoursTemplate);
+                    compositeHoursNode.appendChild(workingHoursTemplate.cloneNode(true));
+                }
+            }
+
+            let selectBtn = getElement(template, 'select-btn');
+            selectBtn.innerHTML = getTranslation(lang, ['selectLabel']);
+            selectBtn.addEventListener('click', function () {
+                selectCallback(location['id']);
+            });
 
             template.setAttribute('data-id', location.id);
-
             template.addEventListener('click', locationClickedHandler);
 
             return template;
         }
 
         /**
-         * Marker clicked event handler.
-         *
-         * @note function is intended to be used in closure.
-         *
-         * @param {google.maps.Marker} marker
-         */
-        function markerClickedHandler(marker) {
-            if (marker === selectedMarker) {
-                return;
-            }
-
-            unselectSelectedMarkers();
-
-            marker.setIcon(pinIconSelected);
-            marker.additionalOptions.selected = true;
-            selectedMarker = marker;
-
-            locationClickedHandler({target: dropOffs[marker.additionalOptions.data.id]});
-            openInfoWindow(marker);
-        }
-
-        /**
          * Handles click event on location.
          */
         function locationClickedHandler(event) {
-            if (event.target === selectedLocation) {
+            if (event.target.classList.contains('excluded') || event.target === selectedLocation) {
                 return;
             }
 
@@ -269,91 +202,16 @@
 
             selectedLocation = dropOffs[id];
             selectedLocation.classList.add('selected');
-
-            google.maps.event.trigger(markers[id], 'click')
         }
 
         /**
-         * Unselects selected markers.
-         */
-        function unselectSelectedMarkers() {
-            if (selectedMarker) {
-                selectedMarker.setIcon(pinIcon);
-                selectedMarker = null;
-                resizeMap();
-            }
-        }
-
-        /**
-         * Unselects location.
+         * Un-selects location.
          */
         function unselectSelectedLocation() {
             if (selectedLocation) {
                 selectedLocation.classList.remove('selected');
                 selectedLocation = null;
             }
-        }
-
-        /**
-         * Opens info popup above marker.
-         *
-         * @param marker
-         */
-        function openInfoWindow(marker) {
-            if (infoWindow) {
-                infoWindow.close();
-            }
-
-            infoWindow = new google.maps.InfoWindow({
-                content: getInfoWindowContent(marker.additionalOptions.data)
-            });
-
-            google.maps.event.addListener(infoWindow, 'closeclick', function () {
-                unselectSelectedMarkers();
-                unselectSelectedLocation();
-            });
-
-            infoWindow.open(map, marker);
-        }
-
-        /**
-         * Returns info window content.
-         *
-         * @param {object} data
-         *
-         * @return {Node}
-         */
-        function getInfoWindowContent(data) {
-            let template = getTemplate('info-window-template');
-
-            let title = getElement(template, 'title');
-            title.innerHTML = data.name;
-
-            let id = getElement(template, 'id');
-            id.innerHTML = getTranslation(lang, ['id']) + ': ' + data.id;
-
-            let address = getElement(template, 'address');
-            address.innerHTML = data.address;
-
-            let selectButton = getElement(template, 'select-button');
-            selectButton.addEventListener('click', selectButtonClickHandler);
-            selectButton.innerHTML = getTranslation(lang, ['selectLabel']);
-
-            let workingHoursButton = getElement(template, 'working-hours-button');
-            workingHoursButton.addEventListener('click', function () {
-                workingHoursButtonClickHandler(template);
-            });
-            workingHoursButton.innerHTML = getTranslation(lang, ['workingHoursLabel']);
-
-            let workingHoursPoint = getElement(template, 'working-hours');
-
-            for (let day of days) {
-                if (data.workingHours[day]) {
-                    workingHoursPoint.appendChild(getWorkingHoursTemplate(day, data.workingHours[day]));
-                }
-            }
-
-            return template;
         }
 
         /**
@@ -376,28 +234,29 @@
         }
 
         /**
-         * Handles click event on select button in info window.
-         */
-        function selectButtonClickHandler() {
-            let id = selectedMarker.additionalOptions.data.id;
-            window.top.postMessage({type: 'select', payload: {id: id}}, '*');
-        }
-
-        /**
          * Handles working hours button clicked event.
          *
-         * @param template
+         * @param event
          */
-        function workingHoursButtonClickHandler(template) {
-            let workingHoursSection = getElement(template, 'working-hours');
-            if (selectedMarker.additionalOptions.workingHours) {
-                workingHoursSection.classList.remove('enabled');
+        function workingHoursButtonClickHandler(event) {
+            let id = event.target.getAttribute('data-id');
+            let workingHoursNode = null;
+
+            if (event.target.hasAttribute('data-lp-composite')) {
+                workingHoursNode = getElement(dropOffs[id], 'composite-working-hours');
             } else {
-                workingHoursSection.classList.add('enabled');
+                workingHoursNode = getElement(dropOffs[id], 'working-hours');
             }
 
-            selectedMarker.additionalOptions.workingHours = !selectedMarker.additionalOptions.workingHours;
-            google.maps.event.trigger(map, 'resize');
+            if (workingHoursNode.classList.contains('enabled')) {
+                event.target.innerHTML = getTranslation(lang, ['workingHoursLabel']);
+                workingHoursNode.classList.remove('enabled');
+            } else {
+                event.target.innerHTML = getTranslation(lang, ['hideWorkingHoursLabel']);
+                workingHoursNode.classList.add('enabled');
+            }
+
+            dropOffs[id].click();
         }
 
         /**
@@ -407,7 +266,7 @@
          * @return {Node}
          */
         function getTemplate(template) {
-            return document.getElementById(template).cloneNode(true);
+            return templateContainer.querySelector(`[data-lp-id=${template}]`).cloneNode(true);
         }
 
         /**
@@ -418,19 +277,7 @@
          * @return {Element}
          */
         function getElement(node, element) {
-            return node.querySelector(`#${element}`);
-        }
-
-        /**
-         * Triggers resize event on map.
-         */
-        function resizeMap() {
-            if (selectedMarker) {
-                map.setCenter(selectedMarker.getPosition());
-            } else if (latLongBounds) {
-                map.fitBounds(latLongBounds);
-            }
-            google.maps.event.trigger(map, 'resize');
+            return node.querySelector(`[data-lp-id=${element}]`);
         }
 
         /**
@@ -500,33 +347,7 @@
                 }, delay);
             }
         }
-
-        /**
-         * Retrieves query parameter from url.
-         *
-         * @param {string} name
-         * @param {[string]} url
-         *
-         * @return {string | null}
-         */
-        function getParameterByName(name, url) {
-            if (typeof url === 'undefined') {
-                url = window.location.href;
-            }
-
-            name = name.replace(/[\[\]]/g, '\\$&');
-
-            let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-            let results = regex.exec(url);
-
-            if (!results) return null;
-
-            if (!results[2]) return '';
-
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
-        }
-
     }
 
-    window.locationPicker = new LocationPickerConstructor();
+    Packlink.locationPicker = new LocationPickerConstructor();
 })();

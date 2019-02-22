@@ -1,0 +1,68 @@
+<!-- Location picker root element -->
+
+<location-picker>
+    <div class="spinner-wrapper disabled" data-lp-id="spinner">
+        <div class="spinner"></div>
+    </div>
+    <div class="content" data-lp-id="content">
+        <div class="locations">
+            <div class="input-wrapper">
+                <div class="input">
+                    <input type="text" title="" required data-lp-id="search-box">
+                    <span class="label" data-lp-id="search-box-label"></span>
+                </div>
+            </div>
+
+            <div data-lp-id="locations"></div>
+        </div>
+    </div>
+</location-picker>
+
+<!-- Location picker components split into templates -->
+
+<location-picker-template>
+    <div class="template" id="template-container">
+        <div data-lp-id="working-hours-template" class="hour-wrapper">
+            <div class="day" data-lp-id="day">
+            </div>
+            <div class="hours" data-lp-id="hours">
+            </div>
+        </div>
+
+        <div class="location-wrapper" data-lp-id="location-template">
+            <div class="radio-button collapse">
+                <div class="radio"></div>
+            </div>
+            <div class="composite expand">
+                <div class="street-name uppercase" data-lp-id="composite-address"></div>
+                <div class="working-hours-btn excluded" data-lp-composite data-lp-id="show-composite-working-hours-btn"></div>
+                <div data-lp-id="composite-working-hours" class="working-hours">
+
+                </div>
+            </div>
+            <div class="name uppercase collapse" data-lp-id="location-name"></div>
+            <div class="street collapse">
+                <div class="street-name uppercase" data-lp-id="location-street"></div>
+                <div class="working-hours-btn excluded" data-lp-id="show-working-hours-btn"></div>
+                <div data-lp-id="working-hours" class="working-hours">
+
+                </div>
+            </div>
+            <div class="city uppercase collapse" data-lp-id="location-city">
+            </div>
+            <div class="select-column">
+                <div class="select-button excluded" data-lp-id="select-btn"></div>
+            </div>
+            <a class="excluded" href="#" data-lp-id="show-on-map" target="_blank">
+                <div class="show-on-map-btn excluded"></div>
+            </a>
+        </div>
+    </div>
+</location-picker-template>
+
+
+<!-- Location picker script used to display locations -->
+
+<script>
+    Packlink.locationPicker.display(YOUR_LOCATIONS, CALLBACK_FUNCTION, TRANSLATION_LANGUAGE);
+</script>

@@ -5,74 +5,134 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Location test</title>
+
+    <!-- INCLUDE LOCATION PICKER CSS -->
+    <link rel="stylesheet" href="./../css/main.css">
+
+    <!-- INCLUDE LOCATION PICKER JS -->
+    <script src="./../js/LocationPicker.js"></script>
+    <script src="./../js/Translations.js"></script>
+
+    <title>Location picker example</title>
 </head>
 <body>
-<script>
-    let locations = [
-        {
-            id: '1',
-            name: 'This is location name',
-            zip: '11000',
-            address: 'Ulica Sima Simica 25',
-            city: 'Belgrade',
-            lat: 44.7866,
-            long: 20.4489,
-            workingHours: {
-                friday: '10:30-12:30, 14:00:16:00',
-                thursday: '10:30-12:30, 14:00:16:00',
-                wednesday: '10:30-12:30, 14:00:16:00',
-                monday: '10:30-12:30, 14:00:16:00',
-                tuesday: '10:30-12:30, 14:00:16:00'
-            }
-        },
-        {
-            id: '2',
-            name: 'This is another name',
-            zip: '179832',
-            address: 'Ulica Jova Jovanovica 25',
-            city: 'Paris',
-            lat: 44.6866,
-            long: 20.3489,
-            workingHours: {
-                friday: '10:30-12:30, 14:00:16:00',
-                thursday: '10:30-12:30, 14:00:16:00',
-                wednesday: '10:30-12:30, 14:00:16:00',
-                monday: '10:30-12:30, 14:00:16:00',
-                tuesday: '10:30-12:30, 14:00:16:00'
-            }
-        },
-        {
-            id: '3',
-            name: 'This is third name',
-            zip: '12456',
-            address: 'Ulica Marka Markovica 25',
-            lat: 44.8866,
-            long: 20.4489,
-            city: 'Berlin',
-            workingHours: {
-                friday: '10:30-12:30, 14:00:16:00',
-                thursday: '10:30-12:30, 14:00:16:00',
-                wednesday: '10:30-12:30, 14:00:16:00',
-                monday: '10:30-12:30, 14:00:16:00',
-                tuesday: '10:30-12:30, 14:00:16:00'
-            }
-        }
-    ];
+    <div style="height: 700px">
+        <location-picker>
+            <div class="spinner-wrapper disabled" data-lp-id="spinner">
+                <div class="spinner"></div>
+            </div>
+            <div class="content" data-lp-id="content">
+                <div class="locations">
+                    <div class="input-wrapper">
+                        <div class="input">
+                            <input type="text" title="" required data-lp-id="search-box">
+                            <span class="label" data-lp-id="search-box-label"></span>
+                        </div>
+                    </div>
 
-    window.onmessage = function (event) {
-        if (event.data.type === 'ready') {
-            let iframe = document.getElementById('my-iframe');
-            iframe.contentWindow.postMessage({type: 'locations', payload: locations}, '*');
-        }
+                    <div data-lp-id="locations"></div>
+                </div>
+            </div>
+        </location-picker>
+    </div>
 
-        if (event.data.type === 'select') {
-            document.getElementById('writer').innerHTML = "SELECTED: " + event.data.payload.id;
-        }
-    }
-</script>
-<iframe src="https://pro.packlink.fr/index.html?lang=en" width="1200" height="600" frameborder="0"
-        id="my-iframe"></iframe>
-<h1 id="writer"></h1>
+    <h1 id="select-display"></h1>
+
+    <location-picker-template>
+        <div class="template" id="template-container">
+            <div data-lp-id="working-hours-template" class="hour-wrapper">
+                <div class="day" data-lp-id="day">
+                </div>
+                <div class="hours" data-lp-id="hours">
+                </div>
+            </div>
+
+            <div class="location-wrapper" data-lp-id="location-template">
+                <div class="radio-button collapse">
+                    <div class="radio"></div>
+                </div>
+                <div class="composite expand">
+                    <div class="street-name uppercase" data-lp-id="composite-address"></div>
+                    <div class="working-hours-btn excluded" data-lp-composite data-lp-id="show-composite-working-hours-btn"></div>
+                    <div data-lp-id="composite-working-hours" class="working-hours">
+
+                    </div>
+                </div>
+                <div class="name uppercase collapse" data-lp-id="location-name"></div>
+                <div class="street collapse">
+                    <div class="street-name uppercase" data-lp-id="location-street"></div>
+                    <div class="working-hours-btn excluded" data-lp-id="show-working-hours-btn"></div>
+                    <div data-lp-id="working-hours" class="working-hours">
+
+                    </div>
+                </div>
+                <div class="city uppercase collapse" data-lp-id="location-city">
+                </div>
+                <div class="select-column">
+                    <div class="select-button excluded" data-lp-id="select-btn"></div>
+                </div>
+                <a class="excluded" href="#" data-lp-id="show-on-map" target="_blank">
+                    <div class="show-on-map-btn excluded"></div>
+                </a>
+            </div>
+        </div>
+    </location-picker-template>
+
+    <script>
+        let locations = [
+            {
+                id: '1',
+                name: 'This is location name',
+                zip: '11000',
+                address: 'Ulica Sima Simica 25',
+                city: 'Belgrade',
+                lat: 44.7866,
+                long: 20.4489,
+                workingHours: {
+                    friday: '10:30-12:30, 14:00:16:00',
+                    thursday: '10:30-12:30, 14:00:16:00',
+                    wednesday: '10:30-12:30, 14:00:16:00',
+                    monday: '10:30-12:30, 14:00:16:00',
+                    tuesday: '10:30-12:30, 14:00:16:00'
+                }
+            },
+            {
+                id: '2',
+                name: 'This is another name',
+                zip: '179832',
+                address: 'Ulica Jova Jovanovica 25',
+                city: 'Paris',
+                lat: 44.6866,
+                long: 20.3489,
+                workingHours: {
+                    friday: '10:30-12:30, 14:00:16:00',
+                    thursday: '10:30-12:30, 14:00:16:00',
+                    wednesday: '10:30-12:30, 14:00:16:00',
+                    monday: '10:30-12:30, 14:00:16:00',
+                    tuesday: '10:30-12:30, 14:00:16:00'
+                }
+            },
+            {
+                id: '3',
+                name: 'This is third name',
+                zip: '12456',
+                address: 'Ulica Marka Markovica 25',
+                lat: 44.8866,
+                long: 20.4489,
+                city: 'Berlin',
+                workingHours: {
+                    friday: '10:30-12:30, 14:00:16:00',
+                    thursday: '10:30-12:30, 14:00:16:00',
+                    wednesday: '10:30-12:30, 14:00:16:00',
+                    monday: '10:30-12:30, 14:00:16:00',
+                    tuesday: '10:30-12:30, 14:00:16:00'
+                }
+            }
+        ];
+
+        Packlink.locationPicker.display(locations, function (id) {
+            document.getElementById('select-display').innerHTML = 'Selected: ' + id;
+        }, 'en');
+    </script>
 </body>
 </html>

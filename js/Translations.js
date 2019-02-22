@@ -9,10 +9,10 @@ var LocationPickerTranslations = {
             saturday: 'Saturday',
             sunday: 'Sunday'
         },
-        zip: 'Zip code',
-        id: 'ID code',
-        selectLabel: 'Select this location',
+        selectLabel: 'Select',
         workingHoursLabel: 'Show working hours',
-        searchLabel: 'Search by location name, id or address'
+        hideWorkingHoursLabel: 'Hide working hours',
+        searchLabel: 'Search by location name, id or address',
+        showOnMapTitle: 'Show on map'
     }
 };

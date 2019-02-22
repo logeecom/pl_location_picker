@@ -1,23 +1,16 @@
-### Communication protocol
+### User manual
 
-1. You can include location picker library by loading it in an iframe. 
-You can specify lang query parameter in an iframe url to select particular language.
+1. Include location picker library and translations provided in `/js/` directory.
 
-2. When location picker library is loaded and ready to receive locations it will send message in
-following format: `{type: 'ready'}`
+2. Include location picker css provided `/css/` directory. **Note** CSS depends on images provided in
+`/img/` directory.
 
-3. Upon receiving message from step 2 you have to provide locations to be rendered on map.
-Message sent to library should be in this format `{type:'locations', payload:DropOff[]}`. 
-**Note** DropOff is an json array of `Packlink\BusinessLogic\Http\DTO\DropOff`.
+3. Copy `<location-picker>` tag to your html page where you wish to display location picker.
 
-4. When location picker library receives locations, received locations will be rendered on google maps
-thus allowing user to make selection.
+4. Copy `<location-picker-template>` anywhere on your page. Make sure this tag is loaded before you try to display
+location picker. 
 
-5. When user selects location, location picker library will send message in the following format:
-`{type:'select', payload: {id: SELECTED_LOCATION_ID}}`.
-
-#### Reset
-You can reset location picker library by sending following message `{type:'reset'}`.
+5. Display location picker by invoking `Packlink.locationPicker.display` method.
 
 #### Example implementation
-Reference implementation of specified communication protocol can be found at `/examples/index.html`
+Reference implementation can be found at `/examples/index.html`
