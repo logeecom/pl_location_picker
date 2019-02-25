@@ -1,40 +1,33 @@
 @media screen and (max-width: 750px) {
-    .collapse {
+    .lp-collapse {
         display: none !important;
     }
 
-    .expand {
+    .lp-expand {
         display: block !important;
         flex-grow: 1;
     }
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    position: relative;
-}
-
-.content {
+.lp-content {
     height: 100%;
     width: 100%;
     display: flex;
     background-color: white;
 }
 
-.locations {
+.lp-locations {
     width: 100%;
     overflow-x: hidden;
     overflow-y: auto;
 }
 
-.select-column {
+.lp-select-column {
     text-overflow: clip !important;
     min-width: 90px;
 }
 
-.select-button {
+.lp-select-button {
     height: 35px;
     border: 1px solid #2095f2;
     border-radius: 4px;
@@ -49,15 +42,15 @@ html, body {
     padding: 0 20px;
 }
 
-.select-button:hover {
+.lp-select-button:hover {
     background-color: #2095f2;
     color: white;
 }
- .select-button * {
+ .lp-select-button * {
     pointer-events: none;
 }
 
-.working-hours {
+.lp-working-hours {
     visibility: hidden;
     height: 0;
     overflow-x: hidden;
@@ -68,36 +61,36 @@ html, body {
     margin-bottom: 5px;
 }
 
-.working-hours.enabled {
+.lp-working-hours.enabled {
     visibility: visible;
     height: auto;
     opacity: 1 !important;
     transition: opacity .25s ease-in;
 }
 
-.hour-wrapper {
+.lp-hour-wrapper {
     display: flex;
 }
 
-.hour-wrapper * {
+.lp-hour-wrapper * {
     height: 25px;
     line-height: 25px;
     color: #5d5d5d;
 }
 
-.hour-wrapper .day {
+.lp-hour-wrapper .day {
     text-transform: uppercase;
     font-size: 16px;
     font-weight: bold;
     width: 45%;
 }
 
-.hour-wrapper .hours {
+.lp-hour-wrapper .hours {
     flex-grow: 1;
     font-size: 12px;
 }
 
-.input-wrapper {
+.lp-input-wrapper {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -105,13 +98,13 @@ html, body {
     margin: 10px 0;
 }
 
-.input-wrapper > .input {
+.lp-input-wrapper > .input {
     width: 70%;
     justify-content: left;
     position: relative;
 }
 
-.input-wrapper > .input > input {
+.lp-input-wrapper > .input > input {
     height: 50px;
     box-sizing: border-box;
     background-color: white;
@@ -123,13 +116,12 @@ html, body {
     color: #5d5d5d;
 }
 
-.input-wrapper > .input > input:focus {
+.lp-input-wrapper > .input > input:focus {
     border: 1px solid #2095f2 !important;
     outline: none !important;
 }
 
-.input-wrapper > .input > .label {
-    height: 16px;
+.lp-input-wrapper > .input > .label {
     max-width: 95%;
     line-height: 16px;
     position: absolute;
@@ -144,9 +136,8 @@ html, body {
     text-overflow: ellipsis;
 }
 
-.input-wrapper > .input > input:focus + .label,
-.input-wrapper > .input > input:valid + .label {
-    height: 12px;
+.lp-input-wrapper > .input > input:focus + .label,
+.lp-input-wrapper > .input > input:valid + .label {
     line-height: 12px;
     position: absolute;
     top: 12px;
@@ -158,7 +149,7 @@ html, body {
     transition: all .25s ease-in;
 }
 
-.location-wrapper {
+.lp-location-wrapper {
     box-sizing: border-box;
     min-height: 50px;
     width: 100%;
@@ -169,15 +160,15 @@ html, body {
     cursor: pointer;
 }
 
-.location-wrapper.selected {
+.lp-location-wrapper.selected {
     border: 1px solid #56b652;
 }
 
-.location-wrapper.selected .radio {
+.lp-location-wrapper.selected .lp-radio {
     background-color: #bdbdbd;
 }
 
-.location-wrapper > * {
+.lp-location-wrapper > * {
     min-height: 55px;
     font: normal 14px Roboto, Arial, sans-serif;
     color: #5d5d5d;
@@ -186,11 +177,11 @@ html, body {
     text-overflow: ellipsis;
 }
 
-.location-wrapper > *:not(.street) {
+.lp-location-wrapper > *:not(.street) {
     line-height: 50px;
 }
 
-.location-wrapper > .composite {
+.lp-location-wrapper > .composite {
     display: none;
     line-height: 20px;
     margin-top: 16px;
@@ -198,46 +189,46 @@ html, body {
     overflow: visible;
 }
 
-.location-wrapper > * {
+.lp-location-wrapper > * {
     pointer-events: none;
 }
 
-.location-wrapper .excluded {
+.lp-location-wrapper .excluded {
     pointer-events: all !important;
 }
 
-.location-wrapper > .radio-button {
+.lp-location-wrapper > .radio-button {
     margin-right: 20px;
 }
 
-.location-wrapper > .name {
+.lp-location-wrapper > .name {
     width: 30%;
     font-weight: bold;
 }
 
-.location-wrapper > .street {
+.lp-location-wrapper > .street {
     flex-grow: 1;
     display: flex;
     flex-flow: column;
     justify-content: center;
 }
 
-.location-wrapper > .street > .street-name {
+.lp-location-wrapper > .street > .street-name {
     margin-top: 13px;
 }
 
-.working-hours-btn {
+.lp-working-hours-btn {
     color: #2095f2;
     font-size: 12px;
     font-weight: 400;
     display: inline-block;
 }
 
-.location-wrapper > .city {
+.lp-location-wrapper > .city {
     width: 20%;
 }
 
-.location-wrapper .radio {
+.lp-location-wrapper .lp-radio {
     width: 10px;
     height: 10px;
     border-radius: 50%;
@@ -250,7 +241,7 @@ html, body {
     width: 100%;
 }
 
-.spinner-wrapper {
+.lp-spinner-wrapper {
     position: absolute;
     display: flex;
     justify-content: center;
@@ -263,16 +254,16 @@ html, body {
     background-color: white;
 }
 
-.spinner {
+.lp-spinner {
     width: 50px;
     height: 50px;
     border: 5px solid #dcdcdc;
     border-left: 5px solid #2095f2;
     border-radius: 50%;
-    animation: rotate 1.5s linear infinite;
+    animation: lp-rotate 1.5s linear infinite;
 }
 
-.spinner-wrapper.disabled {
+.lp-spinner-wrapper.disabled {
     display: none !important;
 }
 
@@ -280,7 +271,7 @@ html, body {
     text-transform: uppercase;
 }
 
-.show-on-map-btn {
+.lp-show-on-map-btn {
     margin-top: 4px;
     margin-right: 20px;
     width: 28px;
@@ -290,15 +281,15 @@ html, body {
     background-repeat: no-repeat;
 }
 
-a:hover > .show-on-map-btn {
+a:hover > .lp-show-on-map-btn {
     background-image: url(./../img/pin-selected.svg) !important;
 }
 
-.template {
+.lp-template {
     display: none !important;
 }
 
-@keyframes rotate {
+@keyframes lp-rotate {
     100% {
         transform: rotate(360deg);
     }

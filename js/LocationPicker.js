@@ -63,7 +63,6 @@ var Packlink = window.Packlink || {};
             }
 
             addLocations();
-            getElement(document, 'spinner').classList.add('disabled');
         }
 
         /**
